@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Bookings from "./pages/Bookings";
 import TaskMasters from "./pages/TaskMasters";
+import TaskMasterApproval from "./pages/TaskMasterApproval";
 import Support from "./pages/Support";
 import Earnings from "./pages/Earnings";
 import Training from "./pages/Training";
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/" element={<Dashboard />} />
           <Route path="/bookings" element={<Bookings />} />
           <Route path="/task-masters" element={<TaskMasters />} />
+          <Route path="/task-master-approval" element={<TaskMasterApproval />} />
           <Route path="/support" element={<Support />} />
           <Route path="/earnings" element={<Earnings />} />
           <Route path="/training" element={<Training />} />

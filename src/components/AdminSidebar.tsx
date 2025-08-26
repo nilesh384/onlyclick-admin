@@ -11,7 +11,8 @@ import {
   AlertTriangle,
   BarChart3,
   ChevronDown,
-  Menu
+  Menu,
+  UserCheck
 } from "lucide-react";
 
 import {
@@ -32,6 +33,7 @@ const mainNavItems = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
   { title: "Bookings", url: "/bookings", icon: Calendar },
   { title: "Task Masters", url: "/task-masters", icon: Users },
+  { title: "TM Approval", url: "/task-master-approval", icon: UserCheck },
   { title: "Support & Complaints", url: "/support", icon: MessageSquare },
 ];
 
