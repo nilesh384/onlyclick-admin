@@ -1,14 +1,26 @@
-User-agent: Googlebot
-Allow: /
+Decorative Fan Installation
+Smart/BLDC Fan Installation
+Tubelight Installation
+Ceiling Light Installation
+Fancy Light Installation
+Hanging Light/Chandelier Installation
+Video Doorbell Installation
+Home Theatre Installation
+TV Installation (Fixed)
+TV Installation (Flexible Bracket)
+Tap Accessory Installation
+Toilet Seat Cover Installation
+Shower Mixer Tap Installation
+Shower Filter Installation
+Drain Cover Installation
+Drain Blockage Removal
+Hose Connection
+Washing Machine Inlet
+RO Connection
+Shut-Off Valve Leakage Repair
+water tank installation
+water tank repair
+motor air removal
+plumber visit
+Cupboard Repair
 
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
-User-agent: *
-Allow: /

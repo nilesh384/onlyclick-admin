@@ -14,8 +14,12 @@ import {
   Phone,
   User
 } from "lucide-react";
+import { useState } from "react";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
 export default function Bookings() {
+  const [period, setPeriod] = useState<"all" | "day" | "week" | "month" | "year">("all");
+
   // Mock data
   const bookings = [
     {
@@ -85,7 +89,7 @@ export default function Bookings() {
         </div>
 
         {/* Filters */}
-        <Card>
+  <Card>
           <CardContent className="pt-6">
             <div className="flex flex-col md:flex-row gap-4">
               <div className="relative flex-1">
@@ -119,10 +123,50 @@ export default function Bookings() {
                   <SelectItem value="ac-repair">AC Repair</SelectItem>
                 </SelectContent>
               </Select>
-              <Button variant="outline">
-                <Filter className="h-4 w-4 mr-2" />
-                More Filters
-              </Button>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline">
+                    <Filter className="h-4 w-4 mr-2" />
+                    More Filters
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="end" className="w-[200px]">
+                  <div className="flex flex-col space-y-2">
+                    <button
+                      className="text-sm text-left px-2 py-1 rounded hover:bg-accent"
+                      onClick={() => setPeriod("day")}
+                    >
+                      Day
+                    </button>
+                    <button
+                      className="text-sm text-left px-2 py-1 rounded hover:bg-accent"
+                      onClick={() => setPeriod("week")}
+                    >
+                      Week
+                    </button>
+                    <button
+                      className="text-sm text-left px-2 py-1 rounded hover:bg-accent"
+                      onClick={() => setPeriod("month")}
+                    >
+                      Month
+                    </button>
+                    <button
+                      className="text-sm text-left px-2 py-1 rounded hover:bg-accent"
+                      onClick={() => setPeriod("year")}
+                    >
+                      Year
+                    </button>
+                    <div className="border-t mt-2 pt-2">
+                      <button
+                        className="text-sm text-left px-2 py-1 text-muted-foreground"
+                        onClick={() => setPeriod("all")}
+                      >
+                        Clear
+                      </button>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
           </CardContent>
         </Card>

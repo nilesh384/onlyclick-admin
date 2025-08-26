@@ -4,7 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
+import { serviceCategories, allServices } from "@/data/servicesData";
 import {
   Search,
   Filter,
@@ -18,23 +20,40 @@ import {
   XCircle,
   MessageSquare
 } from "lucide-react";
+import { useState } from "react";
 
 export default function TaskMasters() {
-  // Mock data
-  const taskMasters = [
+  type TM = {
+    id: string;
+    name: string;
+    phone: string;
+    primaryService: string;
+    location: string;
+    status: 'completed' | 'pending' | 'cancelled' | 'in-progress' | 'approved' | 'rejected' | 'available' | 'busy';
+    rating: number;
+    completionRate: number;
+    totalJobs: number;
+    monthlyEarnings: string;
+    kycStatus: string;
+    trainingStatus: { basic: boolean; advanced: boolean };
+    aadharUrl?: string;
+  };
+
+  const initial: TM[] = [
     {
       id: "TM001",
       name: "Mike Wilson",
       phone: "+91 9876543211",
       primaryService: "Plumbing",
       location: "Gurgaon",
-      status: "available" as const,
+      status: "available",
       rating: 4.8,
       completionRate: 95,
       totalJobs: 142,
       monthlyEarnings: "₹32,500",
       kycStatus: "verified",
-      trainingStatus: { basic: true, advanced: false }
+      trainingStatus: { basic: true, advanced: false },
+      aadharUrl: "/public/placeholder.svg",
     },
     {
       id: "TM002",
@@ -42,13 +61,14 @@ export default function TaskMasters() {
       phone: "+91 9876543213",
       primaryService: "House Cleaning",
       location: "Delhi",
-      status: "busy" as const,
+      status: "busy",
       rating: 4.9,
       completionRate: 98,
       totalJobs: 89,
       monthlyEarnings: "₹28,900",
       kycStatus: "verified",
-      trainingStatus: { basic: true, advanced: true }
+      trainingStatus: { basic: true, advanced: true },
+      aadharUrl: "/public/placeholder.svg",
     },
     {
       id: "TM003",
@@ -56,13 +76,14 @@ export default function TaskMasters() {
       phone: "+91 9876543215",
       primaryService: "AC Repair",
       location: "Gurgaon",
-      status: "available" as const,
+      status: "available",
       rating: 4.6,
       completionRate: 92,
       totalJobs: 67,
       monthlyEarnings: "₹41,200",
       kycStatus: "pending",
-      trainingStatus: { basic: true, advanced: false }
+      trainingStatus: { basic: true, advanced: false },
+      aadharUrl: "/public/placeholder.svg",
     },
     {
       id: "TM004",
@@ -70,15 +91,21 @@ export default function TaskMasters() {
       phone: "+91 9876543217",
       primaryService: "Electrical Work",
       location: "Noida",
-      status: "available" as const,
+      status: "available",
       rating: 4.7,
       completionRate: 94,
       totalJobs: 156,
       monthlyEarnings: "₹38,700",
       kycStatus: "verified",
-      trainingStatus: { basic: true, advanced: true }
-    }
+      trainingStatus: { basic: true, advanced: true },
+      aadharUrl: "/public/placeholder.svg",
+    },
   ];
+
+  const [taskMasters, setTaskMasters] = useState<TM[]>(initial);
+  const [showAdd, setShowAdd] = useState(false);
+  const [form, setForm] = useState({ name: "", phone: "", primaryService: "", location: "" });
+  const [period, setPeriod] = useState<'all'|'day'|'week'|'month'|'year'>('all');
 
   return (
     <AdminLayout>
@@ -89,8 +116,58 @@ export default function TaskMasters() {
             <h1 className="text-3xl font-bold text-foreground">Task Masters Management</h1>
             <p className="text-muted-foreground mt-1">Manage and monitor all registered Task Masters</p>
           </div>
-          <Button>Add Task Master</Button>
+          <div>
+            <Button onClick={() => setShowAdd((s) => !s)}>{showAdd ? "Close" : "Add Task Master"}</Button>
+          </div>
         </div>
+
+        {showAdd && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Add Task Master</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Input placeholder="Full name" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} />
+                <Input placeholder="Phone" value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} />
+                <Input placeholder="Primary service" value={form.primaryService} onChange={(e) => setForm((f) => ({ ...f, primaryService: e.target.value }))} />
+                <Input placeholder="Location" value={form.location} onChange={(e) => setForm((f) => ({ ...f, location: e.target.value }))} />
+                <div className="md:col-span-3 flex items-center space-x-2">
+                  <Button
+                    onClick={() => {
+                      if (!form.name.trim() || !form.phone.trim()) {
+                        window.alert("Please provide at least name and phone.");
+                        return;
+                      }
+                      const nextId = `TM${String(taskMasters.length + 1).padStart(3, "0")}`;
+                      const newTM: TM = {
+                        id: nextId,
+                        name: form.name.trim(),
+                        phone: form.phone.trim(),
+                        primaryService: form.primaryService || "-",
+                        location: form.location || "-",
+                        status: "available",
+                        rating: 0,
+                        completionRate: 0,
+                        totalJobs: 0,
+                        monthlyEarnings: "₹0",
+                        kycStatus: "pending",
+                        trainingStatus: { basic: false, advanced: false },
+                        aadharUrl: "/public/placeholder.svg",
+                      };
+                      setTaskMasters((prev) => [newTM, ...prev]);
+                      setForm({ name: "", phone: "", primaryService: "", location: "" });
+                      setShowAdd(false);
+                    }}
+                  >
+                    Add
+                  </Button>
+                  <Button variant="outline" onClick={() => setShowAdd(false)}>Cancel</Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Filters */}
         <Card>
@@ -126,10 +203,50 @@ export default function TaskMasters() {
                   <SelectItem value="ac-repair">AC Repair</SelectItem>
                 </SelectContent>
               </Select>
-              <Button variant="outline">
-                <Filter className="h-4 w-4 mr-2" />
-                More Filters
-              </Button>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline">
+                    <Filter className="h-4 w-4 mr-2" />
+                    {period === 'all' ? 'More Filters' : `Period: ${period.charAt(0).toUpperCase() + period.slice(1)}`}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="end" className="w-[200px]">
+                  <div className="flex flex-col space-y-2">
+                    <button
+                      className="text-sm text-left px-2 py-1 rounded hover:bg-accent"
+                      onClick={() => setPeriod("day")}
+                    >
+                      Day
+                    </button>
+                    <button
+                      className="text-sm text-left px-2 py-1 rounded hover:bg-accent"
+                      onClick={() => setPeriod("week")}
+                    >
+                      Week
+                    </button>
+                    <button
+                      className="text-sm text-left px-2 py-1 rounded hover:bg-accent"
+                      onClick={() => setPeriod("month")}
+                    >
+                      Month
+                    </button>
+                    <button
+                      className="text-sm text-left px-2 py-1 rounded hover:bg-accent"
+                      onClick={() => setPeriod("year")}
+                    >
+                      Year
+                    </button>
+                    <div className="border-t mt-2 pt-2">
+                      <button
+                        className="text-sm text-left px-2 py-1 text-muted-foreground"
+                        onClick={() => setPeriod("all")}
+                      >
+                        Clear
+                      </button>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
           </CardContent>
         </Card>
@@ -173,7 +290,40 @@ export default function TaskMasters() {
                       </td>
                       <td>
                         <div>
-                          <p className="font-medium">{tm.primaryService}</p>
+                          <div className="flex items-start justify-between">
+                            <p className="font-medium">{tm.primaryService}</p>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button variant="ghost" size="sm">View services</Button>
+                              </PopoverTrigger>
+                              <PopoverContent align="end" className="w-[300px]">
+                                <div className="space-y-2">
+                                  <p className="text-sm font-medium">Services for {tm.primaryService}</p>
+                                  <div className="max-h-48 overflow-auto">
+                                    {
+                                      (() => {
+                                        const cat = serviceCategories.find((c: any) => c.name.toLowerCase() === tm.primaryService.toLowerCase());
+                                        const catId = cat ? cat.id : tm.primaryService.toLowerCase();
+                                        const servicesFor = allServices.filter((s: any) => s.category === catId);
+                                        if (!servicesFor.length) return <p className="text-xs text-muted-foreground">No services found for this category.</p>;
+                                        return servicesFor.map((s: any) => (
+                                          <div key={s.serviceId} className="flex items-center justify-between p-1">
+                                            <div>
+                                              <div className="text-sm font-medium">{s.title}</div>
+                                              <div className="text-xs text-muted-foreground">{s.duration} • ₹{s.price}</div>
+                                            </div>
+                                            <div>
+                                              <Button size="sm" variant="outline" onClick={() => window.alert(`${s.title}\n\n${s.description}\n\nPrice: ₹${s.price}`)}>Details</Button>
+                                            </div>
+                                          </div>
+                                        ));
+                                      })()
+                                    }
+                                  </div>
+                                </div>
+                              </PopoverContent>
+                            </Popover>
+                          </div>
                           <div className="flex items-center text-xs text-muted-foreground mt-1">
                             <MapPin className="h-3 w-3 mr-1" />
                             {tm.location}

@@ -41,7 +41,6 @@ const managementItems = [
   { title: "Earnings & Payments", url: "/earnings", icon: DollarSign },
   { title: "Training Management", url: "/training", icon: GraduationCap },
   { title: "Services & Categories", url: "/services", icon: Settings },
-  { title: "Incident Center", url: "/incidents", icon: AlertTriangle },
   { title: "Reports & Analytics", url: "/reports", icon: BarChart3 },
 ];
 
@@ -69,8 +68,8 @@ export function AdminSidebar() {
         <div className="px-4 py-3 mb-4">
           {!isCollapsed ? (
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-sidebar-primary rounded-lg flex items-center justify-center">
-                <span className="text-sidebar-primary-foreground font-bold text-sm">OC</span>
+              <div className="w-8 h-8  rounded-lg flex items-center justify-center">
+                <img src="/whitebg.png" alt="Only Click" width={32} height={32} className="rounded-lg object-cover" />
               </div>
               <div>
                 <h1 className="text-sidebar-foreground font-semibold text-lg">Only Click</h1>

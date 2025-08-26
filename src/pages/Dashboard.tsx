@@ -12,10 +12,12 @@ import {
   AlertTriangle,
   Clock,
   CheckCircle,
-  Eye
+  Eye,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   // Mock data
   const recentBookings = [
     {
@@ -257,22 +259,15 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Button variant="outline" className="h-20 flex flex-col items-center justify-center space-y-2">
+              <Button
+                variant="outline"
+                className="h-20 flex flex-col items-center justify-center space-y-2"
+                onClick={() => navigate('/task-masters#add')}
+              >
                 <Users className="h-6 w-6" />
                 <span className="text-sm">Add Task Master</span>
               </Button>
-              <Button variant="outline" className="h-20 flex flex-col items-center justify-center space-y-2">
-                <Calendar className="h-6 w-6" />
-                <span className="text-sm">Create Booking</span>
-              </Button>
-              <Button variant="outline" className="h-20 flex flex-col items-center justify-center space-y-2">
-                <AlertTriangle className="h-6 w-6" />
-                <span className="text-sm">Report Issue</span>
-              </Button>
-              <Button variant="outline" className="h-20 flex flex-col items-center justify-center space-y-2">
-                <TrendingUp className="h-6 w-6" />
-                <span className="text-sm">View Reports</span>
-              </Button>
+              
             </div>
           </CardContent>
         </Card>

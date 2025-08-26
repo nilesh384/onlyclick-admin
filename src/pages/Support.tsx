@@ -308,22 +308,12 @@ export default function Support() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Button variant="outline" className="h-16 flex flex-col items-center justify-center space-y-1">
-                <MessageSquare className="h-5 w-5" />
-                <span className="text-sm">Bulk Message</span>
-              </Button>
+              
               <Button variant="outline" className="h-16 flex flex-col items-center justify-center space-y-1">
                 <DollarSign className="h-5 w-5" />
                 <span className="text-sm">Issue Refund</span>
               </Button>
-              <Button variant="outline" className="h-16 flex flex-col items-center justify-center space-y-1">
-                <AlertTriangle className="h-5 w-5" />
-                <span className="text-sm">Escalate Issue</span>
-              </Button>
-              <Button variant="outline" className="h-16 flex flex-col items-center justify-center space-y-1">
-                <FileText className="h-5 w-5" />
-                <span className="text-sm">Generate Report</span>
-              </Button>
+              
             </div>
           </CardContent>
         </Card>
