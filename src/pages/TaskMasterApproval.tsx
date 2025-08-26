@@ -33,7 +33,6 @@ interface TaskMaster {
   experience: string;
   rating?: number;
   aadharNumber: string;
-  aadharVerified: boolean;
   documents: {
     aadharCard: string;
     photo: string;
@@ -53,7 +52,6 @@ const mockTaskMasters: TaskMaster[] = [
     status: "pending",
     experience: "5 years",
     aadharNumber: "1234 5678 9012",
-    aadharVerified: true,
     documents: {
       aadharCard: "/api/placeholder/400/250",
       photo: "/api/placeholder/150/150"
@@ -70,7 +68,6 @@ const mockTaskMasters: TaskMaster[] = [
     status: "under_review",
     experience: "3 years",
     aadharNumber: "9876 5432 1098",
-    aadharVerified: true,
     documents: {
       aadharCard: "/api/placeholder/400/250",
       photo: "/api/placeholder/150/150"
@@ -87,7 +84,22 @@ const mockTaskMasters: TaskMaster[] = [
     status: "pending",
     experience: "7 years",
     aadharNumber: "5678 9012 3456",
-    aadharVerified: false,
+    documents: {
+      aadharCard: "/api/placeholder/400/250",
+      photo: "/api/placeholder/150/150"
+    }
+  },
+  {
+    id: "TM004",
+    name: "Anita Reddy",
+    email: "anita.reddy@email.com",
+    phone: "+91 6543210987",
+    location: "Hyderabad, India",
+    services: ["House Cleaning", "Laundry"],
+    appliedDate: "2024-01-12",
+    status: "pending",
+    experience: "2 years",
+    aadharNumber: "4321 0987 6543",
     documents: {
       aadharCard: "/api/placeholder/400/250",
       photo: "/api/placeholder/150/150"
@@ -140,7 +152,7 @@ export default function TaskMasterApproval() {
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold text-foreground">Task Master Approval</h1>
-          <p className="text-muted-foreground">Review and approve Task Master applications</p>
+          <p className="text-muted-foreground">Review Task Master applications and verify documents for approval</p>
         </div>
 
         {/* Metrics */}
@@ -173,7 +185,7 @@ export default function TaskMasterApproval() {
         {/* Filters */}
         <Card>
           <CardHeader>
-            <CardTitle>Applications</CardTitle>
+            <CardTitle>Applications Pending Approval</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
@@ -219,11 +231,9 @@ export default function TaskMasterApproval() {
                           <Badge variant="outline" className="text-xs">
                             {taskMaster.id}
                           </Badge>
-                          {taskMaster.aadharVerified && (
-                            <Badge variant="outline" className="text-xs text-success">
-                              Aadhar Verified
-                            </Badge>
-                          )}
+                          <Badge variant="outline" className="text-xs text-warning">
+                            Awaiting Approval
+                          </Badge>
                         </div>
                         <div className="flex items-center space-x-4 text-sm text-muted-foreground mt-1">
                           <span className="flex items-center">
@@ -325,31 +335,27 @@ export default function TaskMasterApproval() {
                   {/* Documents */}
                   <div className="space-y-4">
                     <h3 className="text-lg font-semibold text-foreground border-b border-border pb-2">
-                      Documents & Verification
+                      Documents for Verification
                     </h3>
                     
                     <div className="space-y-4">
                       <div>
                         <div className="flex items-center justify-between mb-2">
                           <label className="text-sm font-medium text-muted-foreground">Aadhar Number</label>
-                          {selectedTaskMaster.aadharVerified ? (
-                            <Badge variant="outline" className="text-success">
-                              <CheckCircle className="h-3 w-3 mr-1" />
-                              Verified
-                            </Badge>
-                          ) : (
-                            <Badge variant="outline" className="text-destructive">
-                              <XCircle className="h-3 w-3 mr-1" />
-                              Pending
-                            </Badge>
-                          )}
+                          <Badge variant="outline" className="text-warning">
+                            <XCircle className="h-3 w-3 mr-1" />
+                            Pending Verification
+                          </Badge>
                         </div>
                         <p className="text-foreground font-mono">{selectedTaskMaster.aadharNumber}</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Please verify this number matches the Aadhar card document below
+                        </p>
                       </div>
 
                       <div>
                         <div className="flex items-center justify-between mb-2">
-                          <label className="text-sm font-medium text-muted-foreground">Aadhar Card</label>
+                          <label className="text-sm font-medium text-muted-foreground">Aadhar Card Document</label>
                           <Button variant="outline" size="sm">
                             <Download className="h-3 w-3 mr-1" />
                             Download
@@ -358,21 +364,27 @@ export default function TaskMasterApproval() {
                         <div className="border border-border rounded-lg p-2 bg-muted/20">
                           <img 
                             src={selectedTaskMaster.documents.aadharCard} 
-                            alt="Aadhar Card" 
-                            className="w-full h-32 object-cover rounded"
+                            alt="Aadhar Card - Verify details match application" 
+                            className="w-full h-48 object-cover rounded"
                           />
                         </div>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          Verify that the name, photo, and Aadhar number on this document match the application details
+                        </p>
                       </div>
 
                       <div>
-                        <label className="text-sm font-medium text-muted-foreground">Profile Photo</label>
+                        <label className="text-sm font-medium text-muted-foreground">Application Photo</label>
                         <div className="border border-border rounded-lg p-2 bg-muted/20 mt-2">
                           <img 
                             src={selectedTaskMaster.documents.photo} 
-                            alt="Profile" 
+                            alt="Applicant Profile Photo" 
                             className="w-full h-32 object-cover rounded"
                           />
                         </div>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          Compare this photo with the photo on the Aadhar card
+                        </p>
                       </div>
                     </div>
                   </div>
